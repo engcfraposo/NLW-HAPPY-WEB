@@ -1,0 +1,71 @@
+@import "../../mixin.scss";
+
+#page-landing{
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(329.54deg, $blue_light 0%, $blue_regular 100%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .content-wrapper{
+        position: relative;
+        background: url('../../image/Landing.svg') no-repeat 70% center;
+
+        width: 100%;
+        max-width: 1100px;
+
+        height: 100%;
+        max-height: 680px;
+
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: space-between;
+        .location{
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            font-size: 24px;
+            line-height: 34px;
+            text-align: right;
+
+            display: flex;
+            flex-direction: column;
+        }
+        .enter-app{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            width: 80px;
+            height: 80px;
+            background-color: $yellow_regular;
+            border-radius: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition:  background-color 0.2s;
+
+            &:hover{
+                background-color: $blue_button;
+            }
+        }
+        main{
+            max-width: 350px;
+            h1{
+                
+                font-size: 76px;
+                line-height: 70px;
+            }
+            p{
+                margin-top: 40px;
+                font-size: 24px;
+                line-height: 34px;
+            }
+        }
+    }
+}
