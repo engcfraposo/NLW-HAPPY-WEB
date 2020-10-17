@@ -1,52 +1,31 @@
+/* eslint-disable react/button-has-type */
+/* eslint-disable import/order */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { Map, Marker, TileLayer } from 'react-leaflet';
-import L from 'leaflet';
-import { useHistory } from 'react-router-dom';
-
-import { FiArrowLeft, FiPlus } from 'react-icons/fi';
-
-import mapMarkerImg from '../../image/Local.svg';
-
+import { Marker } from 'react-leaflet';
+import { ButtonBase } from '@material-ui/core';
+import PrimaryButton from '../../components/PrimaryButton';
+import Sidebar from '../../components/Sidebar';
 import './styles.scss';
+import { FiPlus } from 'react-icons/fi';
+import Map from '../../components/Map';
+import happyMapIcon from '../../components/Map/happyMapIcon';
 
-const happyMapIcon = L.icon({
-  iconUrl: mapMarkerImg,
-
-  iconSize: [58, 68],
-  iconAnchor: [29, 68],
-  popupAnchor: [0, -60],
-});
-
-export default function CreateOrphanage() {
-  const { goBack } = useHistory();
-
+export default function OrphanagesMap() {
   return (
     <div id="page-create-orphanage">
-      <aside>
-        <img src={mapMarkerImg} alt="Happy" />
-
-        <footer>
-          <button type="button" onClick={goBack}>
-            <FiArrowLeft size={24} color="#FFF" />
-          </button>
-        </footer>
-      </aside>
-
+      <Sidebar />
       <main>
         <form className="create-orphanage-form">
           <fieldset>
             <legend>Dados</legend>
 
-            <Map
-              center={[-27.2092052, -49.6401092]}
-              style={{ width: '100%', height: 280 }}
-              zoom={15}
-            >
-              <TileLayer
-                url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
+            <Map style={{ width: '100%', height: 280 }}>
+              <Marker
+                interactive={false}
+                icon={happyMapIcon}
+                position={[-27.2092052, -49.6401092]}
               />
-
-              <Marker interactive={false} icon={happyMapIcon} position={[-27.2092052, -49.6401092]} />
             </Map>
 
             <div className="input-block">
@@ -90,19 +69,14 @@ export default function CreateOrphanage() {
               <label htmlFor="open_on_weekends">Atende fim de semana</label>
 
               <div className="button-select">
-                <button type="button" className="active">Sim</button>
-                <button type="button">Não</button>
+                <ButtonBase type="button" className="active">Sim</ButtonBase>
+                <ButtonBase type="button">Não</ButtonBase>
               </div>
             </div>
           </fieldset>
-
-          <button className="confirm-button" type="submit">
-            Confirmar
-          </button>
+          <PrimaryButton type="submit">Confirmar</PrimaryButton>
         </form>
       </main>
     </div>
   );
 }
-
-// return `https://a.tile.openstreetmap.org/${z}/${x}/${y}.png`;

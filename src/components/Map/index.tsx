@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { Map as LeafletMap, MapProps as LeafletMapProps, TileLayer } from 'react-leaflet';
 
