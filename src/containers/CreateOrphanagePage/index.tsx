@@ -1,36 +1,111 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react/button-has-type */
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useState } from 'react';
 import { Marker } from 'react-leaflet';
 import { ButtonBase } from '@material-ui/core';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import PrimaryButton from '../../components/PrimaryButton';
 import Sidebar from '../../components/Sidebar';
 import './styles.scss';
 import { FiPlus } from 'react-icons/fi';
 import Map from '../../components/Map';
+import { LeafletMouseEvent } from 'leaflet';
 import happyMapIcon from '../../components/Map/happyMapIcon';
 
 export default function OrphanagesMap() {
+  const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
+  const [openWeekends, setOpenWeekends] = useState<boolean>(true);
+
+  const handleClick = (point: LeafletMouseEvent) => {
+    const { lat, lng } = point.latlng;
+
+    setPosition({
+      latitude: lat,
+      longitude: lng,
+    });
+  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      about: '',
+      instructions: '',
+      opening_hours: '',
+    },
+    validationSchema: Yup.object().shape({
+      name: Yup.string().required('Requerido'),
+      about: Yup.string().required('Requerido').max(300),
+      instructions: Yup.string().required('Requerido'),
+      opening_hours: Yup.string().required('Requerido'),
+    }),
+    onSubmit: async (values) => {
+      console.log(values);
+      // toast.success('Dados alterados com sucesso!');
+    },
+  });
+
+  const {
+    name: nameError,
+    about: aboutError,
+    instructions: instructionsError,
+    opening_hours: openingHoursError,
+  } = formik.errors;
+
+  const {
+    name: nameTouched,
+    about: aboutTouched,
+    instructions: instructionsTouched,
+    opening_hours: openingHoursTouched,
+  } = formik.touched;
+
+  const {
+    name,
+    about,
+    instructions,
+    opening_hours,
+  } = formik.values;
+
   return (
     <div id="page-create-orphanage">
       <Sidebar />
       <main>
-        <form className="create-orphanage-form">
+        <form
+          noValidate
+          onSubmit={formik.handleSubmit}
+          className="create-orphanage-form"
+        >
           <fieldset>
             <legend>Dados</legend>
-
-            <Map style={{ width: '100%', height: 280 }}>
-              <Marker
-                interactive={false}
-                icon={happyMapIcon}
-                position={[-27.2092052, -49.6401092]}
-              />
+            {(position.latitude === 0 && position.longitude === 0)
+            && (
+              <div className="input-block">
+                <label className="error">Coloque o ponto no mapa!</label>
+              </div>
+            )}
+            <Map
+              style={{ width: '100%', height: 280 }}
+              onclick={handleClick}
+            >
+              {(position.latitude !== 0 && position.longitude !== 0)
+                && (
+                  <Marker
+                    interactive={false}
+                    icon={happyMapIcon}
+                    position={[position.latitude, position.longitude]}
+                  />
+                )}
             </Map>
-
             <div className="input-block">
               <label htmlFor="name">Nome</label>
-              <input id="name" />
+              <input
+                id="name"
+                name="name"
+                onChange={formik.handleChange}
+                value={name}
+              />
+              {(nameTouched && nameError) && (<label className="error">{nameError}</label>)}
             </div>
 
             <div className="input-block">
@@ -38,7 +113,14 @@ export default function OrphanagesMap() {
                 Sobre
                 <span>Máximo de 300 caracteres</span>
               </label>
-              <textarea id="name" maxLength={300} />
+              <textarea
+                id="about"
+                name="about"
+                onChange={formik.handleChange}
+                value={about}
+                maxLength={300}
+              />
+              {(aboutTouched && aboutError) && (<label className="error">{aboutError}</label>)}
             </div>
 
             <div className="input-block">
@@ -46,9 +128,12 @@ export default function OrphanagesMap() {
 
               <div className="uploaded-image" />
 
-              <button className="new-image">
-                <FiPlus size={24} color="#15b6d6" />
-              </button>
+              <div className="images-container">
+                <label htmlFor="image[]" className="new-image">
+                  <FiPlus size={24} color="#15b6d6" />
+                </label>
+              </div>
+              <input type="file" id="image[]"/>
             </div>
           </fieldset>
 
@@ -57,24 +142,55 @@ export default function OrphanagesMap() {
 
             <div className="input-block">
               <label htmlFor="instructions">Instruções</label>
-              <textarea id="instructions" />
+              <textarea
+                id="instructions"
+                name="instructions"
+                onChange={formik.handleChange}
+                value={instructions}
+              />
+              {(instructionsTouched && instructionsError) && (<label className="error">{instructionsError}</label>)}
             </div>
 
             <div className="input-block">
-              <label htmlFor="opening_hours">Nome</label>
-              <input id="opening_hours" />
+              <label htmlFor="opening_hours">Horario de atendimento</label>
+              <input
+                id="opening_hours"
+                name="opening_hours"
+                onChange={formik.handleChange}
+                value={opening_hours}
+              />
+              {(openingHoursTouched && openingHoursError) && (<label className="error">{openingHoursError}</label>)}
             </div>
 
             <div className="input-block">
               <label htmlFor="open_on_weekends">Atende fim de semana</label>
 
               <div className="button-select">
-                <ButtonBase type="button" className="active">Sim</ButtonBase>
-                <ButtonBase type="button">Não</ButtonBase>
+                <ButtonBase
+                  type="button"
+                  className={openWeekends ? ('active') : ('')}
+                  onClick={() => setOpenWeekends(true)}
+                >
+                  Sim
+                </ButtonBase>
+                <ButtonBase
+                  type="button"
+                  className={!openWeekends ? ('active') : ('')}
+                  onClick={() => setOpenWeekends(false)}
+                >
+                  Não
+                </ButtonBase>
               </div>
             </div>
           </fieldset>
-          <PrimaryButton type="submit">Confirmar</PrimaryButton>
+          <PrimaryButton
+            type="submit"
+            disabled={(
+              (position.latitude === 0 && position.longitude === 0)
+              )}
+          >
+            Confirmar
+          </PrimaryButton>
         </form>
       </main>
     </div>
