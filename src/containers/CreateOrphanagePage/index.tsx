@@ -2,7 +2,7 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Marker } from 'react-leaflet';
 import { ButtonBase } from '@material-ui/core';
 import * as Yup from 'yup';
@@ -18,6 +18,20 @@ import happyMapIcon from '../../components/Map/happyMapIcon';
 export default function OrphanagesMap() {
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
   const [openWeekends, setOpenWeekends] = useState<boolean>(true);
+  const [images, setImages] = useState<File[]>([]);
+  const [previewImage, setPreviewImage] = useState<string[]>([]);
+
+  const handleSelectImages = (image: ChangeEvent<HTMLInputElement>) => {
+    if (!image.target.files) {
+      return;
+    }
+
+    const selectedImages = Array.from(image.target.files);
+    setImages(selectedImages);
+
+    const selectedImagesPreview = selectedImages.map((selectedImage) => URL.createObjectURL(selectedImage));
+    setPreviewImage(selectedImagesPreview);
+  };
 
   const handleClick = (point: LeafletMouseEvent) => {
     const { lat, lng } = point.latlng;
@@ -104,6 +118,9 @@ export default function OrphanagesMap() {
                 name="name"
                 onChange={formik.handleChange}
                 value={name}
+                disabled={(
+                  (position.latitude === 0 && position.longitude === 0)
+                  )}
               />
               {(nameTouched && nameError) && (<label className="error">{nameError}</label>)}
             </div>
@@ -119,6 +136,9 @@ export default function OrphanagesMap() {
                 onChange={formik.handleChange}
                 value={about}
                 maxLength={300}
+                disabled={(
+                  (position.latitude === 0 && position.longitude === 0)
+                  )}
               />
               {(aboutTouched && aboutError) && (<label className="error">{aboutError}</label>)}
             </div>
@@ -129,11 +149,21 @@ export default function OrphanagesMap() {
               <div className="uploaded-image" />
 
               <div className="images-container">
+                {previewImage.map((preview) => (
+                  <img key={preview} src={preview} alt={name} />
+                ))}
                 <label htmlFor="image[]" className="new-image">
                   <FiPlus size={24} color="#15b6d6" />
                 </label>
               </div>
-              <input type="file" id="image[]"/>
+              <input
+                type="file"
+                id="image[]"
+                onChange={handleSelectImages}
+                disabled={(
+                  (position.latitude === 0 && position.longitude === 0)
+                  )}
+              />
             </div>
           </fieldset>
 
@@ -147,6 +177,9 @@ export default function OrphanagesMap() {
                 name="instructions"
                 onChange={formik.handleChange}
                 value={instructions}
+                disabled={(
+                  (position.latitude === 0 && position.longitude === 0)
+                  )}
               />
               {(instructionsTouched && instructionsError) && (<label className="error">{instructionsError}</label>)}
             </div>
@@ -158,6 +191,9 @@ export default function OrphanagesMap() {
                 name="opening_hours"
                 onChange={formik.handleChange}
                 value={opening_hours}
+                disabled={(
+                  (position.latitude === 0 && position.longitude === 0)
+                  )}
               />
               {(openingHoursTouched && openingHoursError) && (<label className="error">{openingHoursError}</label>)}
             </div>
@@ -170,6 +206,9 @@ export default function OrphanagesMap() {
                   type="button"
                   className={openWeekends ? ('active') : ('')}
                   onClick={() => setOpenWeekends(true)}
+                  disabled={(
+                    (position.latitude === 0 && position.longitude === 0)
+                    )}
                 >
                   Sim
                 </ButtonBase>
@@ -177,6 +216,9 @@ export default function OrphanagesMap() {
                   type="button"
                   className={!openWeekends ? ('active') : ('')}
                   onClick={() => setOpenWeekends(false)}
+                  disabled={(
+                    (position.latitude === 0 && position.longitude === 0)
+                    )}
                 >
                   Não
                 </ButtonBase>
