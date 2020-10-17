@@ -1,68 +1,90 @@
 @import "../../mixin.scss";
 
-#page-map{
-    width: 100%;
-    height: 100vh;
-
-    position: relative;
-    display: flex;
-
-    aside{
-        width: 440px;
-        background: linear-gradient(329.54deg, $blue_light 0%, $blue_regular 100%);
-        padding: 80px;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        h2{
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 42px;
-            margin-top: 64px;
-        }
-
-        p{
-            line-height: 28px;
-            margin-top: 24px;
-        }
-
-        footer{
-            display: flex;
-            flex-direction: column;
-
-            line-height: 24px;
-
-            strong{
-                font-weight: 800;
-            }
-        }
-    }
-
-    .create-orphanage{
-        position: absolute;
-            right: 40px;
-            bottom: 40px;
-
-            width: 64px;
-            height: 64px;
-            background-color: $blue_regular;
-            border-radius: 20px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-
-            transition:  background-color 0.2s;
-
-            &:hover{
-                background-color: $blue_light;
-            }
-    }
-
-    .leaflet-container{
-        z-index: 5;
-    }
+  
+#page-map {
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	display: flex;
+	aside {
+		width: 440px;
+		background: linear-gradient(329.54deg, #15B6D6 0%, #15D6D6 100%);
+		padding: 80px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		h2 {
+			font-size: 40px;
+			font-weight: 800;
+			line-height: 42px;
+			margin-top: 64px;
+		}
+		p {
+			line-height: 28px;
+			margin-top: 24px;
+		}
+		footer {
+			display: flex;
+			flex-direction: column;
+			line-height: 24px;
+			strong {
+				font-weight: 800px;
+			}
+		}
+	}
+	.map-popup {
+		.leaflet-popup-content-wrapper {
+			background: rgba(255, 255, 255, 0.8);
+			box-shadow: 17.2868px 27.6589px 41.4884px rgba(23, 142, 166, 0.16);
+			border-radius: 20px;
+		}
+		.leaflet-popup-content {
+			color: #0089A5;
+			font-size: 20px;
+			font-weight: 700;
+			margin: 8px 12px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			a {
+				width: 40px;
+				height: 40px;
+				background: #15C3D6;
+				box-shadow: 17.2868px 27.6589px 41.4884px rgba(23, 142, 166, 0.16);
+				border-radius: 12px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+		.leaflet-popup-tip-container {
+			top: 50%;
+			left: 0;
+		}
+		.leaflet-popup-tip {
+			display: none;
+		}
+	}
+	.leaflet-container {
+		z-index: 5;
+	}
+	a.create-orphanage {
+		position: absolute;
+		border: 0;
+		right: 40px;
+		bottom: 40px;
+		width: 64px;
+		height: 64px;
+		background: #15C3D6;
+		border-radius: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 10;
+		cursor: pointer;
+		transition: background-color 0.2s;
+		&:hover {
+			background: #17D6EB;
+		}
+	}
 }
