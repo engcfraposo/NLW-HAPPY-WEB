@@ -7,6 +7,8 @@ import { Marker } from 'react-leaflet';
 import { ButtonBase } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PrimaryButton from '../../components/PrimaryButton';
 import Sidebar from '../../components/Sidebar';
 import './styles.scss';
@@ -14,6 +16,7 @@ import { FiPlus } from 'react-icons/fi';
 import Map from '../../components/Map';
 import { LeafletMouseEvent } from 'leaflet';
 import happyMapIcon from '../../components/Map/happyMapIcon';
+import { api } from '../../services/api';
 
 export default function OrphanagesMap() {
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
@@ -56,7 +59,39 @@ export default function OrphanagesMap() {
     }),
     onSubmit: async (values) => {
       console.log(values);
-      // toast.success('Dados alterados com sucesso!');
+
+      const data = new FormData();
+
+      const {
+        name,
+        about,
+        instructions,
+        opening_hours,
+      } = values;
+
+      const {
+        latitude,
+        longitude,
+      } = position;
+
+      data.append('name', name);
+      data.append('about', about);
+      data.append('latitude', String(latitude));
+      data.append('longitude', String(longitude));
+      data.append('instructions', instructions);
+      data.append('opening_hours', opening_hours);
+      data.append('open_on_weekends', String(openWeekends));
+      images.forEach((image) => {
+        data.append('images', image);
+      });
+
+      try {
+        api.post('orphanages', data);
+        return toast.success('Dados alterados com sucesso!');
+      } catch (error) {
+        console.log(error);
+        return toast.error('Erro no cadastro sucesso!');
+      }
     },
   });
 
@@ -157,6 +192,7 @@ export default function OrphanagesMap() {
                 </label>
               </div>
               <input
+                multiple
                 type="file"
                 id="image[]"
                 onChange={handleSelectImages}

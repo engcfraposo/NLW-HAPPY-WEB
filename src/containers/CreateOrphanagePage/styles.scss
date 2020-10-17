@@ -134,6 +134,12 @@ form.create-orphanage-form {
 				justify-content: center;
 				align-items: center;
 			}
+			img{
+				width: 100%;
+				height: 96px;
+				object-fit: cover;
+				border-radius: 20px;
+			}
 		}
 
 		input[type=File]{
