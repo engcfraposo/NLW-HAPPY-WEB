@@ -3,6 +3,7 @@
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { ChangeEvent, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Marker } from 'react-leaflet';
 import { ButtonBase } from '@material-ui/core';
 import * as Yup from 'yup';
@@ -23,6 +24,9 @@ export default function OrphanagesMap() {
   const [openWeekends, setOpenWeekends] = useState<boolean>(true);
   const [images, setImages] = useState<File[]>([]);
   const [previewImage, setPreviewImage] = useState<string[]>([]);
+
+  const history = useHistory();
+
 
   const handleSelectImages = (image: ChangeEvent<HTMLInputElement>) => {
     if (!image.target.files) {
@@ -86,8 +90,9 @@ export default function OrphanagesMap() {
       });
 
       try {
-        api.post('orphanages', data);
-        return toast.success('Dados alterados com sucesso!');
+        await api.post('orphanages', data);
+        toast.success('Dados alterados com sucesso!');
+        return history.push('/app');
       } catch (error) {
         console.log(error);
         return toast.error('Erro no cadastro sucesso!');
