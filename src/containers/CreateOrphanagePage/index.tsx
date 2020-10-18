@@ -5,15 +5,16 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Marker } from 'react-leaflet';
+import { FiPlus } from 'react-icons/fi';
 import { ButtonBase } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import PrimaryButton from '../../components/PrimaryButton';
 import Sidebar from '../../components/Sidebar';
 import './styles.scss';
-import { FiPlus } from 'react-icons/fi';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Map from '../../components/Map';
 import { LeafletMouseEvent } from 'leaflet';
 import happyMapIcon from '../../components/Map/happyMapIcon';
@@ -26,7 +27,6 @@ export default function OrphanagesMap() {
   const [previewImage, setPreviewImage] = useState<string[]>([]);
 
   const history = useHistory();
-
 
   const handleSelectImages = (image: ChangeEvent<HTMLInputElement>) => {
     if (!image.target.files) {
