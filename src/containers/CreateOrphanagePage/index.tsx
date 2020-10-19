@@ -12,13 +12,12 @@ import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import PrimaryButton from '../../components/PrimaryButton';
 import Sidebar from '../../components/Sidebar';
-import './styles.scss';
-import 'react-toastify/dist/ReactToastify.css';
-
 import Map from '../../components/Map';
 import { LeafletMouseEvent } from 'leaflet';
 import happyMapIcon from '../../components/Map/happyMapIcon';
 import { api } from '../../services/api';
+import './styles.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function OrphanagesMap() {
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 });
